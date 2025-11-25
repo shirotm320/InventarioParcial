@@ -1,0 +1,34 @@
+﻿@model InventarioParcial.Dtos.ProductReadDto
+
+@{
+    ViewData["Title"] = "Borrar Producto";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger shadow">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">🗑️ ¿Eliminar este producto?</h4>
+                </div>
+                <div class="card-body text-center">
+                    <h3 class="card-title text-danger">@Model.Name</h3>
+                    <p class="lead">Categoría: <strong>@Model.CategoryName</strong></p>
+                    <p class="display-6">C$ @Model.Price.ToString("N2")</p>
+
+                    <div class="alert alert-warning mt-3">
+                        <i class="fa fa-exclamation-triangle"></i>
+                        Esta acción no se puede deshacer.
+                    </div>
+
+                    <form asp-action="Delete" method="post" class="mt-4">
+                        <input type="hidden" asp-for="Id" />
+
+                        <a asp-action="Index" class="btn btn-secondary me-2">Cancelar</a>
+                        <button type="submit" class="btn btn-danger">Sí, eliminarlo</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

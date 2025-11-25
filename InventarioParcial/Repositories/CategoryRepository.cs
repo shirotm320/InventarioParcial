@@ -1,0 +1,49 @@
+﻿using InventarioParcial.Data.InventarioParcial.Models;
+using InventarioParcial.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace InventarioParcial.Repositories
+{
+    public class CategoryRepository : ICategoryRepository
+    {
+        private readonly AppDbContext _context;
+
+        public CategoryRepository(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IEnumerable<Category>> GetAllAsync()
+        {
+            return await _context.Categories.ToListAsync();
+        }
+
+        public async Task<Category?> GetByIdAsync(int id)
+        {
+            return await _context.Categories.FindAsync(id);
+        }
+
+        public async Task CreateAsync(Category category)
+        {
+            _context.Categories.Add(category);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Category category)
+        {
+            _context.Categories.Update(category);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var category = await _context.Categories.FindAsync(id);
+            if (category != null)
+            {
+                // OJO: Aquí podrías validar si tiene productos antes de borrar
+                _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
+            }
+        }
+    }
+}

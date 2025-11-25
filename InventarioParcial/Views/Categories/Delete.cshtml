@@ -1,0 +1,16 @@
+﻿@model InventarioParcial.Dtos.CategoryDto
+@{
+    ViewData["Title"] = "Borrar Categoría";
+}
+
+<div class="container mt-5 text-center">
+    <div class="alert alert-danger col-md-6 mx-auto">
+        <h3>¿Borrar "@Model.Name"?</h3>
+        <p>Esto podría afectar a los productos que tengan esta categoría.</p>
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">Sí, borrar</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+﻿@model IEnumerable<InventarioParcial.Dtos.ProductReadDto>
+
+@{
+    ViewData["Title"] = "Productos";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>📦 Inventario de Productos</h2>
+
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fa fa-plus"></i> Nuevo Producto
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table table-hover table-striped align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th class="text-end">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">
+                                <h5>No hay productos registrados aún.</h5>
+                                <p>Dale al botón azul para agregar el primero.</p>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="fw-bold">@item.Name</td>
+
+                                <td>
+                                    <span class="badge bg-info text-dark">@item.CategoryName</span>
+                                </td>
+
+                                <td>C$ @item.Price.ToString("N2")</td>
+
+                                <td>
+                                    @if (item.Stock < 5)
+                                    {
+                                        <span class="text-danger fw-bold">⚠️ @item.Stock (Bajo)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-success fw-bold">✔ @item.Stock</span>
+                                    }
+                                </td>
+
+                                <td class="text-end">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning me-1">
+                                        Editar
+                                    </a>
+
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">
+                                        Borrar
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
