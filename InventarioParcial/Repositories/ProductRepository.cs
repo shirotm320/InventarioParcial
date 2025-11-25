@@ -15,8 +15,7 @@ namespace InventarioParcial.Repositories
 
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            // El .Include es CRUCIAL: Trae los datos de la Categoría junto con el producto
-            // Si no lo pones, la categoría vendrá vacía (null).
+          
             return await _context.Products
                 .Include(p => p.Category)
                 .ToListAsync();

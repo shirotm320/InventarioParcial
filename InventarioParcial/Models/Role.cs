@@ -9,7 +9,7 @@
 
             [Required]
             [MaxLength(50)]
-            public string Name { get; set; } // Ej: "Admin", "User"
+            public string Name { get; set; } 
 
             // Relación Muchos a Muchos con Users
             public ICollection<UserRole>? UserRoles { get; set; }

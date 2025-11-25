@@ -30,7 +30,7 @@
                 modelBuilder.Entity<UserRole>()
                     .HasKey(ur => new { ur.UserId, ur.RoleId });
 
-                // Configuraciones de relaciones explícitas (opcional, pero recomendado)
+                // Configuraciones de relaciones 
                 modelBuilder.Entity<UserRole>()
                     .HasOne(ur => ur.User)
                     .WithMany(u => u.UserRoles)

@@ -9,6 +9,6 @@ namespace InventarioParcial.Dtos
         [Required(ErrorMessage = "El nombre es obligatorio")]
         public string Name { get; set; } = string.Empty;
 
-        public string? Description { get; set; } // Agregamos esto
+        public string? Description { get; set; } 
     }
 }

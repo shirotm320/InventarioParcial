@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using InventarioParcial.Dtos;
-using InventarioParcial.Models; // Necesario para mapear clases
+using InventarioParcial.Models; 
 using InventarioParcial.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,12 +9,12 @@ namespace InventarioParcial.Controllers
     public class ProductsController : Controller
     {
         private readonly IProductRepository _productRepository;
-        private readonly ICategoryRepository _categoryRepository; // <--- ESTO FALTABA
+        private readonly ICategoryRepository _categoryRepository; 
         private readonly IMapper _mapper;
 
-        // Inyectamos AMBOS repositorios y el Mapper
+       
         public ProductsController(IProductRepository productRepository,
-                                  ICategoryRepository categoryRepository, // <--- Y ESTO EN EL CONSTRUCTOR
+                                  ICategoryRepository categoryRepository, 
                                   IMapper mapper)
         {
             _productRepository = productRepository;
@@ -22,9 +22,6 @@ namespace InventarioParcial.Controllers
             _mapper = mapper;
         }
 
-        // ======================================
-        // 1. LISTADO (INDEX)
-        // ======================================
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -33,9 +30,7 @@ namespace InventarioParcial.Controllers
             return View(productDtos);
         }
 
-        // ======================================
-        // 2. CREAR (CREATE)
-        // ======================================
+       
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -60,9 +55,7 @@ namespace InventarioParcial.Controllers
             return View(productDto);
         }
 
-        // ======================================
-        // 3. EDITAR (EDIT)
-        // ======================================
+    
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -75,7 +68,6 @@ namespace InventarioParcial.Controllers
 
             var productDto = _mapper.Map<ProductCreateDto>(product);
 
-            // Importante: Cargar categorías de nuevo para el Select en Edit
             ViewBag.Categories = await _categoryRepository.GetAllAsync();
             ViewBag.ProductId = id;
 
@@ -101,7 +93,7 @@ namespace InventarioParcial.Controllers
             }
 
             ViewBag.Categories = await _categoryRepository.GetAllAsync();
-            // Importante: volver a pasar el ID por si la vista lo necesita
+          
             ViewBag.ProductId = id;
             return View(productDto);
         }

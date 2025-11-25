@@ -14,9 +14,9 @@
             public string Name { get; set; }
 
             [MaxLength(255)]
-            public string? Description { get; set; } // El '?' permite que sea nulo en la BD
+            public string? Description { get; set; } 
 
-            // Relación: Una categoría tiene MUCHOS productos
+            
             public ICollection<Product>? Products { get; set; }
         }
     }

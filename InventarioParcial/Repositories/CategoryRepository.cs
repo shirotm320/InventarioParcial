@@ -40,7 +40,7 @@ namespace InventarioParcial.Repositories
             var category = await _context.Categories.FindAsync(id);
             if (category != null)
             {
-                // OJO: Aquí podrías validar si tiene productos antes de borrar
+                
                 _context.Categories.Remove(category);
                 await _context.SaveChangesAsync();
             }

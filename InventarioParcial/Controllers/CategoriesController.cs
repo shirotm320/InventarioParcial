@@ -88,8 +88,7 @@ namespace InventarioParcial.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            // Aquí podrías validar si la categoría tiene productos antes de borrar
-            // Para el examen, lo borramos directo
+           
             await _categoryRepository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }

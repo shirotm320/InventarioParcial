@@ -13,7 +13,7 @@
             public string Name { get; set; }
 
             [Required]
-            [Column(TypeName = "decimal(18,2)")] // Define precisión para dinero
+            [Column(TypeName = "decimal(18,2)")]
             public decimal Price { get; set; }
 
             [Required]
@@ -22,7 +22,7 @@
             // --- Claves Foráneas ---
 
             [Required]
-            public int CategoryId { get; set; } // La columna en la BD
+            public int CategoryId { get; set; } 
 
             [ForeignKey("CategoryId")]
             public Category? Category { get; set; } // El objeto de navegación
