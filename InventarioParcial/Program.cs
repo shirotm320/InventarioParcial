@@ -1,6 +1,6 @@
 ﻿using InventarioParcial.Data.InventarioParcial.Models;
 using InventarioParcial.Repositories;
-using Microsoft.AspNetCore.Authentication.Cookies; // <--- NECESARIO PARA COOKIES
+using Microsoft.AspNetCore.Authentication.Cookies; 
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,29 +20,23 @@ builder.Services.AddAutoMapper(typeof(Program));
 // C. Repositorios (Inyección de Dependencias)
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<IAuthRepository, AuthRepository>(); // <--- NUEVO: Repositorio de Auth
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
-// D. Configuración de Autenticación (COOKIES)
-// Esto le dice a la App: "Usa cookies para recordar al usuario y si no está logueado, mándalo al Login"
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/Auth/Login"; // Ruta al Login
-        options.AccessDeniedPath = "/Auth/AccessDenied"; // Ruta si no tiene permiso (ej: User queriendo borrar)
+        options.AccessDeniedPath = "/Auth/AccessDenied"; // Ruta si no tiene permiso 
         options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // La sesión dura 1 hora
     });
 
 // E. Controladores y Vistas
 builder.Services.AddControllersWithViews();
 
-// ==========================================
-// ⛔ CONSTRUCCIÓN DE LA APP
-// ==========================================
+
 var app = builder.Build();
 
-// ==========================================
-// 2. PIPELINE
-// ==========================================
 
 if (!app.Environment.IsDevelopment())
 {
