@@ -22,9 +22,7 @@ namespace InventarioParcial.Controllers
             _mapper = mapper;
         }
 
-        // ==========================================
-        // INDEX: Accesible para cualquier usuario logueado (Admin o User)
-        // ==========================================
+
         [HttpGet]
         [Authorize] // <--- Solo requiere estar logueado
         public async Task<IActionResult> Index()
@@ -38,7 +36,7 @@ namespace InventarioParcial.Controllers
         // CREATE: SOLO ADMIN
         // ==========================================
         [HttpGet]
-        [Authorize(Roles = "Admin")] // <--- CANDADO: Solo si tu Rol es "Admin"
+        [Authorize(Roles = "Admin")] 
         public async Task<IActionResult> Create()
         {
             ViewBag.Categories = await _categoryRepository.GetAllAsync();
@@ -101,9 +99,7 @@ namespace InventarioParcial.Controllers
             return View(productDto);
         }
 
-        // ==========================================
-        // DELETE: SOLO ADMIN (Agregado porque faltaba)
-        // ==========================================
+
         [HttpGet]
         [Authorize(Roles = "Admin")] // <--- CANDADO
         public async Task<IActionResult> Delete(int id)
