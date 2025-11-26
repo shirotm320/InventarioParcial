@@ -7,19 +7,51 @@
     <div class="card col-md-6 mx-auto shadow">
         <div class="card-header bg-primary text-white"><h4>Nueva Categoría</h4></div>
         <div class="card-body">
-            <form asp-action="Create">
+            <form asp-action="Create" id="createCategoryForm">
+
                 <div class="mb-3">
                     <label asp-for="Name" class="form-label">Nombre</label>
-                    <input asp-for="Name" class="form-control" />
+                    <input asp-for="Name" class="form-control" placeholder="Ej: Electrónica" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
+
                 <div class="mb-3">
                     <label asp-for="Description" class="form-label">Descripción</label>
-                    <textarea asp-for="Description" class="form-control"></textarea>
+                    <textarea asp-for="Description" class="form-control" placeholder="Breve descripción..."></textarea>
                 </div>
+
                 <button type="submit" class="btn btn-success w-100">Guardar</button>
                 <a asp-action="Index" class="btn btn-secondary w-100 mt-2">Cancelar</a>
             </form>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js"></script>
+
+    <script>
+        // 2. Configuración
+        const validator = new JustValidate('#createCategoryForm', {
+            errorFieldCssClass: 'is-invalid',
+            errorLabelCssClass: 'text-danger mt-1 small',
+        });
+
+        // 3. Reglas
+        validator
+            .addField('#Name', [
+                {
+                    rule: 'required',
+                    errorMessage: '¡El nombre de la categoría es obligatorio!',
+                },
+                {
+                    rule: 'minLength',
+                    value: 3,
+                    errorMessage: 'Debe tener al menos 3 letras.',
+                },
+            ])
+            .onSuccess((event) => {
+                event.target.submit();
+            });
+    </script>
+}

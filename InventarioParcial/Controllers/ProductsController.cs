@@ -1,6 +1,7 @@
-﻿using AutoMapper;
+﻿using Microsoft.AspNetCore.Authorization; // <--- 1. IMPORTANTE PARA LA SEGURIDAD
+using AutoMapper;
 using InventarioParcial.Dtos;
-using InventarioParcial.Models; 
+using InventarioParcial.Models;
 using InventarioParcial.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,12 +10,11 @@ namespace InventarioParcial.Controllers
     public class ProductsController : Controller
     {
         private readonly IProductRepository _productRepository;
-        private readonly ICategoryRepository _categoryRepository; 
+        private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
 
-       
         public ProductsController(IProductRepository productRepository,
-                                  ICategoryRepository categoryRepository, 
+                                  ICategoryRepository categoryRepository,
                                   IMapper mapper)
         {
             _productRepository = productRepository;
@@ -22,7 +22,11 @@ namespace InventarioParcial.Controllers
             _mapper = mapper;
         }
 
+        // ==========================================
+        // INDEX: Accesible para cualquier usuario logueado (Admin o User)
+        // ==========================================
         [HttpGet]
+        [Authorize] // <--- Solo requiere estar logueado
         public async Task<IActionResult> Index()
         {
             var products = await _productRepository.GetAllAsync();
@@ -30,17 +34,20 @@ namespace InventarioParcial.Controllers
             return View(productDtos);
         }
 
-       
+        // ==========================================
+        // CREATE: SOLO ADMIN
+        // ==========================================
         [HttpGet]
+        [Authorize(Roles = "Admin")] // <--- CANDADO: Solo si tu Rol es "Admin"
         public async Task<IActionResult> Create()
         {
-            // Cargamos la lista para el dropdown
             ViewBag.Categories = await _categoryRepository.GetAllAsync();
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")] // <--- CANDADO
         public async Task<IActionResult> Create(ProductCreateDto productDto)
         {
             if (ModelState.IsValid)
@@ -50,21 +57,20 @@ namespace InventarioParcial.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Si falla, recargar categorías
             ViewBag.Categories = await _categoryRepository.GetAllAsync();
             return View(productDto);
         }
 
-    
+        // ==========================================
+        // EDIT: SOLO ADMIN
+        // ==========================================
         [HttpGet]
+        [Authorize(Roles = "Admin")] // <--- CANDADO
         public async Task<IActionResult> Edit(int id)
         {
             var product = await _productRepository.GetByIdAsync(id);
 
-            if (product == null)
-            {
-                return NotFound();
-            }
+            if (product == null) return NotFound();
 
             var productDto = _mapper.Map<ProductCreateDto>(product);
 
@@ -76,26 +82,46 @@ namespace InventarioParcial.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")] // <--- CANDADO
         public async Task<IActionResult> Edit(int id, ProductCreateDto productDto)
         {
             if (ModelState.IsValid)
             {
                 var productToUpdate = await _productRepository.GetByIdAsync(id);
-
                 if (productToUpdate == null) return NotFound();
 
-                // AutoMapper actualiza solo los campos que cambiaron
                 _mapper.Map(productDto, productToUpdate);
-
                 await _productRepository.UpdateAsync(productToUpdate);
 
                 return RedirectToAction(nameof(Index));
             }
 
             ViewBag.Categories = await _categoryRepository.GetAllAsync();
-          
             ViewBag.ProductId = id;
             return View(productDto);
+        }
+
+        // ==========================================
+        // DELETE: SOLO ADMIN (Agregado porque faltaba)
+        // ==========================================
+        [HttpGet]
+        [Authorize(Roles = "Admin")] // <--- CANDADO
+        public async Task<IActionResult> Delete(int id)
+        {
+            var product = await _productRepository.GetByIdAsync(id);
+            if (product == null) return NotFound();
+
+            var productDto = _mapper.Map<ProductReadDto>(product);
+            return View(productDto);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")] // <--- CANDADO
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _productRepository.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

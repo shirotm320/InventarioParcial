@@ -6,10 +6,16 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between mb-3">
         <h2> Categorías</h2>
-        <a asp-action="Create" class="btn btn-primary"><i class="fa fa-plus"></i> Nueva Categoría</a>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fa fa-plus"></i> Nueva Categoría
+            </a>
+        }
     </div>
 
-    <table class="table table-hover shadow-sm">
+    <table class="table table-hover shadow-sm align-middle">
         <thead class="table-dark">
             <tr>
                 <th>Nombre</th>
@@ -23,9 +29,17 @@
                 <tr>
                     <td class="fw-bold">@item.Name</td>
                     <td>@item.Description</td>
+
                     <td class="text-end">
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Borrar</a>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Borrar</a>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Solo lectura</span>
+                        }
                     </td>
                 </tr>
             }

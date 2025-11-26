@@ -8,18 +8,19 @@ namespace InventarioParcial.Mappings
     {
         public MappingProfile()
         {
-            // 1. Categorías (Ida y vuelta)
+            // 1. Categorías
             CreateMap<Category, CategoryDto>().ReverseMap();
 
-            
+            // 2. Producto -> ProductReadDto (Lectura en tabla)
             CreateMap<Product, ProductReadDto>()
                 .ForMember(dest => dest.CategoryName,
                            opt => opt.MapFrom(src => src.Category != null ? src.Category.Name : "Sin Categoría"));
 
-            // 3. ProductCreateDto -> Product (Creación)
-            CreateMap<ProductCreateDto, Product>();
+            // 3. AQUÍ ESTABA EL ERROR: Agregamos .ReverseMap()
+            // Esto permite convertir DTO -> Producto (Guardar) y Producto -> DTO (Cargar formulario Editar)
+            CreateMap<ProductCreateDto, Product>().ReverseMap();
 
-            // 4. Usuarios (Solo mapeamos Username, la password se maneja aparte por seguridad)
+            // 4. Usuarios
             CreateMap<UserRegisterDto, User>();
         }
     }

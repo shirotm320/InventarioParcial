@@ -13,7 +13,7 @@
                     <h4 class="mb-0">✏️ Editar Producto</h4>
                 </div>
                 <div class="card-body">
-                    <form asp-action="Edit" asp-route-id="@productId" method="post">
+                    <form asp-action="Edit" asp-route-id="@productId" method="post" id="editForm">
 
                         <div class="mb-3">
                             <label asp-for="Name" class="form-label">Nombre</label>
@@ -54,7 +54,62 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script src="https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js"></script>
+
+    <script>
+        // 2. Iniciamos la validación buscando el formulario por su ID 'editForm'
+        const validator = new JustValidate('#editForm', {
+            errorFieldCssClass: 'is-invalid',
+            errorLabelCssClass: 'text-danger mt-1 small',
+        });
+
+        // 3. Definimos las mismas reglas que en Crear
+        validator
+            .addField('#Name', [
+                {
+                    rule: 'required',
+                    errorMessage: '¡El nombre es obligatorio!',
+                },
+                {
+                    rule: 'minLength',
+                    value: 3,
+                    errorMessage: 'El nombre debe tener al menos 3 letras.',
+                },
+            ])
+            .addField('#CategoryId', [
+                {
+                    rule: 'required',
+                    errorMessage: 'Por favor, selecciona una categoría.',
+                },
+            ])
+            .addField('#Price', [
+                {
+                    rule: 'required',
+                    errorMessage: 'El precio es requerido.',
+                },
+                {
+                    rule: 'minNumber',
+                    value: 0.01,
+                    errorMessage: 'El precio debe ser mayor a 0.',
+                },
+            ])
+            .addField('#Stock', [
+                {
+                    rule: 'required',
+                    errorMessage: 'El stock es requerido.',
+                },
+                {
+                    rule: 'integer',
+                    errorMessage: 'El stock debe ser un número entero.',
+                },
+                {
+                    rule: 'minNumber',
+                    value: 0,
+                    errorMessage: 'El stock no puede ser negativo.',
+                },
+            ])
+            .onSuccess((event) => {
+                event.target.submit();
+            });
+    </script>
 }

@@ -25,7 +25,7 @@
             public int CategoryId { get; set; } 
 
             [ForeignKey("CategoryId")]
-            public Category? Category { get; set; } // El objeto de navegación
+            public Category? Category { get; set; } 
         }
     }
 

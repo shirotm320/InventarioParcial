@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Microsoft.AspNetCore.Authorization; // <--- 1. IMPORTANTE
+using AutoMapper;
 using InventarioParcial.Dtos;
 using InventarioParcial.Models;
 using InventarioParcial.Repositories;
@@ -17,7 +18,11 @@ namespace InventarioParcial.Controllers
             _mapper = mapper;
         }
 
-        // 1. LISTADO
+        // ==========================================
+        // 1. LISTADO (Visible para cualquier usuario logueado)
+        // ==========================================
+        [HttpGet]
+        [Authorize] // <--- Solo requiere estar logueado
         public async Task<IActionResult> Index()
         {
             var categories = await _categoryRepository.GetAllAsync();
@@ -25,8 +30,11 @@ namespace InventarioParcial.Controllers
             return View(dtos);
         }
 
-        // 2. CREAR
+        // ==========================================
+        // 2. CREAR (Solo Admin)
+        // ==========================================
         [HttpGet]
+        [Authorize(Roles = "Admin")] // <--- CANDADO
         public IActionResult Create()
         {
             return View();
@@ -34,6 +42,7 @@ namespace InventarioParcial.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")] // <--- CANDADO
         public async Task<IActionResult> Create(CategoryDto dto)
         {
             if (ModelState.IsValid)
@@ -45,8 +54,11 @@ namespace InventarioParcial.Controllers
             return View(dto);
         }
 
-        // 3. EDITAR
+        // ==========================================
+        // 3. EDITAR (Solo Admin)
+        // ==========================================
         [HttpGet]
+        [Authorize(Roles = "Admin")] // <--- CANDADO
         public async Task<IActionResult> Edit(int id)
         {
             var category = await _categoryRepository.GetByIdAsync(id);
@@ -58,6 +70,7 @@ namespace InventarioParcial.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")] // <--- CANDADO
         public async Task<IActionResult> Edit(CategoryDto dto)
         {
             if (ModelState.IsValid)
@@ -73,8 +86,11 @@ namespace InventarioParcial.Controllers
             return View(dto);
         }
 
-        // 4. BORRAR
+        // ==========================================
+        // 4. BORRAR (Solo Admin)
+        // ==========================================
         [HttpGet]
+        [Authorize(Roles = "Admin")] // <--- CANDADO
         public async Task<IActionResult> Delete(int id)
         {
             var category = await _categoryRepository.GetByIdAsync(id);
@@ -86,9 +102,9 @@ namespace InventarioParcial.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")] // <--- CANDADO
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-           
             await _categoryRepository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }

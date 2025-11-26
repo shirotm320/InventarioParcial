@@ -8,9 +8,12 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>📦 Inventario de Productos</h2>
 
-        <a asp-action="Create" class="btn btn-primary">
-            <i class="fa fa-plus"></i> Nuevo Producto
-        </a>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fa fa-plus"></i> Nuevo Producto
+            </a>
+        }
     </div>
 
     <div class="card shadow-sm">
@@ -31,7 +34,6 @@
                         <tr>
                             <td colspan="5" class="text-center text-muted py-4">
                                 <h5>No hay productos registrados aún.</h5>
-                                <p>Dale al botón azul para agregar el primero.</p>
                             </td>
                         </tr>
                     }
@@ -60,13 +62,20 @@
                                 </td>
 
                                 <td class="text-end">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning me-1">
-                                        Editar
-                                    </a>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning me-1">
+                                            <i class="fa fa-pencil"></i> Editar
+                                        </a>
 
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">
-                                        Borrar
-                                    </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">
+                                            <i class="fa fa-trash"></i> Borrar
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Solo lectura</span>
+                                    }
                                 </td>
                             </tr>
                         }
