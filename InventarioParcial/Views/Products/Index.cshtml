@@ -6,7 +6,7 @@
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>📦 Inventario de Productos</h2>
+        <h2> Inventario de Productos</h2>
 
         @if (User.IsInRole("Admin"))
         {
@@ -53,11 +53,11 @@
                                 <td>
                                     @if (item.Stock < 5)
                                     {
-                                        <span class="text-danger fw-bold">⚠️ @item.Stock (Bajo)</span>
+                                        <span class="text-danger fw-bold"> @item.Stock (Bajo)</span>
                                     }
                                     else
                                     {
-                                        <span class="text-success fw-bold">✔ @item.Stock</span>
+                                        <span class="text-success fw-bold"> @item.Stock</span>
                                     }
                                 </td>
 

@@ -1,12 +1,46 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Bienvenido al Inventario</h1>
-    <p>Sistema de gestión de productos y categorías.</p>
+<div class="text-center mt-4">
+    <h1 class="display-4 fw-bold" style="color: #0047BA;">Almacén LA CURACAO</h1>
+    <p class="lead text-muted">Sistema de Control de Inventario y Ventas</p>
 
-    <a asp-controller="Products" asp-action="Index" class="btn btn-primary btn-lg mt-3">
-        Ver Productos
-    </a>
+    <div class="my-4">
+        <img src="~/images/portada.jpg"
+             alt="Tienda La Curacao"
+             class="img-fluid rounded shadow"
+             style="max-height: 400px; width: auto; border-bottom: 5px solid #FFD100;"
+             onerror="this.style.display='none'" />
+
+    </div>
+
+    <div class="mt-5">
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            <div class="alert alert-light shadow-sm">
+                <h3 class="fw-light">Bienvenido, <span class="fw-bold text-primary">@User.Identity.Name</span> 👋</h3>
+                <p>¿Qué gestión realizarás hoy?</p>
+
+                <div class="d-flex justify-content-center gap-3 mt-3">
+                    <a asp-controller="Products" asp-action="Index" class="btn btn-primary btn-lg px-4">
+                        <i class="fa fa-box"></i> Gestionar Productos
+                    </a>
+                    <a asp-controller="Categories" asp-action="Index" class="btn btn-outline-dark btn-lg px-4">
+                        <i class="fa fa-tags"></i> Ver Categorías
+                    </a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="p-4 bg-light rounded shadow-sm" style="max-width: 600px; margin: 0 auto;">
+                <h4 class="mb-3">Acceso Restringido</h4>
+                <p>Para gestionar el inventario, necesitas credenciales de empleado.</p>
+                <a asp-controller="Auth" asp-action="Login" class="btn btn-warning btn-lg fw-bold px-5">
+                    <i class="fa fa-key"></i> Iniciar Sesión
+                </a>
+            </div>
+        }
+    </div>
 </div>
